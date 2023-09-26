@@ -1,15 +1,17 @@
 {
   "expo": {
-    "name": "nusaApps",
-    "slug": "nusaApps",
+    "name": "Nusa Mobile",
+    "slug": "slug-aplikasi-anda",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "icon": "./assets/splashSAIM.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splashSAIM.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
       "**/*"
@@ -20,11 +22,21 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "backgroundColor": "#FFFFFF"
+      },
+      "permissions": [
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ],
+      "package": "com.rmdnigilang.slugaplikasianda"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c75533f1-31e6-4907-9099-e2e2c6608c20"
+      }
     }
   }
 }
