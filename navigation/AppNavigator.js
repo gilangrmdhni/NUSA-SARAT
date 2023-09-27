@@ -28,11 +28,6 @@ const AppNavigator = () => {
             backgroundColor: '#F16877',
           },
         }} />
-        {/* <Stack.Screen name="Ujian" component={UjianScreen} options={{
-          headerTitle: '', headerStyle: {
-            backgroundColor: '#F16877',
-          },
-        }} /> */}
         <Stack.Screen name="Riwayat" component={RiwayatScreen} options={{
           headerTitle: 'Riwayat', headerStyle: {
             backgroundColor: '#F16877',

@@ -20,7 +20,6 @@ const dummyReportData = [
     tanggal: '25-09-2023',
     grade: 'B+',
   },
-  // Tambahkan lebih banyak data laporan hasil ujian sesuai kebutuhan
 ];
 
 const ReportScreen = () => {

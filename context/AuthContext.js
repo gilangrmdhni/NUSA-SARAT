@@ -6,28 +6,23 @@ export const AuthContext = createContext();
 
 // Buat komponen provider untuk konteks autentikasi
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user_id, setUserId] = useState(null);
 
-  // Fungsi untuk melakukan login
   const signIn = (userData) => {
-    // Lakukan logika login di sini
-    setUser(userData); // Contoh: menyimpan data pengguna setelah berhasil login
+    setUserId(userData);
   };
 
-  // Fungsi untuk melakukan logout
   const signOut = () => {
-    // Lakukan logika logout di sini
-    setUser(null); // Contoh: menghapus data pengguna saat logout
+    setUserId(null); 
   };
 
   return (
-    <AuthContext.Provider value={{ user, signIn, signOut }}>
+    <AuthContext.Provider value={{ user_id, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Buat fungsi custom hook untuk menggunakan konteks autentikasi
 export const useAuth = () => {
   return useContext(AuthContext);
 };

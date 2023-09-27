@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Modal from 'react-native-modal';
 import axios from 'axios';
 import {
@@ -16,11 +16,14 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import * as ImagePicker from 'expo-image-picker';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { CheckBox } from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const FormInput = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [ujian, setUjian] = useState({});
+    const [userId, setUserId] = useState(null); const
+        [currentPage, setCurrentPage] = useState(1);
+    const [page1Id, setPage1Id] = useState(null);
+    const [selectedAnswers, setSelectedAnswers] = useState([]);
     const [selectedOption, setSelectedOption] = useState('');
     const [sessions, setSessions] = useState([]);
     const [institutions, setInstitutions] = useState([]);
@@ -82,22 +85,62 @@ const FormInput = () => {
         }
     };
 
+
+    const fetchUserData = async () => {
+        try {
+            const userDataString = await AsyncStorage.getItem('userData');
+            if (userDataString) {
+                const userData = JSON.parse(userDataString);
+            } else {
+                console.log('Data Pengguna tidak ditemukan di AsyncStorage.');
+            }
+        } catch (error) {
+            console.error('Gagal mengambil data pengguna dari AsyncStorage:', error);
+        }
+    };
+
     useEffect(() => {
+        fetchUserData();
         fetchSessions();
         fetchInstitutions();
     }, []);
 
     useEffect(() => {
+        console.log('Nilai selectedOption:', selectedOption);
         if (selectedOption) {
             fetchQuestions(selectedOption);
         }
     }, [selectedOption]);
 
+    useEffect(() => {
+        const fetchUserIdFromAsyncStorage = async () => {
+            try {
+                const storedUserData = await AsyncStorage.getItem('user');
+                if (storedUserData) {
+                    const { id } = JSON.parse(storedUserData);
+                    setUserId(id);
+                    console.log('user_id:', id);
+                }
+            } catch (error) {
+                console.error('Error fetching user_id from AsyncStorage:', error);
+            }
+        };
+
+        fetchUserIdFromAsyncStorage();
+    }, []);
+
+
+
     const handleOptionSelect = (questionId, optionId) => {
-        setUjian({
-            ...ujian,
-            [questionId]: optionId,
-        });
+        const existingAnswerIndex = selectedAnswers.findIndex(answer => answer.question_id === questionId);
+
+        if (existingAnswerIndex !== -1) {
+            const updatedAnswers = [...selectedAnswers];
+            updatedAnswers[existingAnswerIndex] = { question_id: questionId, question_detail_id: optionId };
+            setSelectedAnswers(updatedAnswers);
+        } else {
+            setSelectedAnswers([...selectedAnswers, { question_id: questionId, question_detail_id: optionId }]);
+        }
     };
 
     const handleOpenStartTimePicker = () => {
@@ -163,87 +206,138 @@ const FormInput = () => {
                     name: fileName,
                 });
             }
-
             const response = await axios.post('https://api-nusa-sarat.nuncorp.id/api/v1/session/resume/answer', formData);
+
+            // Pemeriksaan respons dari server
+            if (response.status === 200) {
+                // Data berhasil terkirim ke server
+                console.log('Data pada halaman 1 berhasil terkirim ke server:', response.data);
+
+                // Tambahkan kode lain yang perlu dieksekusi setelah berhasil
+            } else {
+                // Gagal mengirim data
+                console.error('Gagal mengirim data ke server pada halaman 1');
+            }
+
             return response.data;
         } catch (error) {
-            console.error('Error sending data to API on page 1:', error);
+            console.error('Error sending data to API on page 1:', error.response ? error.response.data : error.message);
             throw error;
         }
     };
 
+
     const sendFormDataToAPIPage2 = async (formData) => {
         try {
+            if (!userId) {
+                console.error('userId is missing.');
+                return;
+            }
+            formData.user_id = userId;
             const response = await axios.post('https://api-nusa-sarat.nuncorp.id/api/v1/exams/answer', formData);
             return response.data;
         } catch (error) {
             console.error('Error sending data to API on page 2:', error);
+            if (error.response) {
+                console.error('API Error Response:', error.response.data);
+            }
             throw error;
         }
     };
-
     const handleSendMessage = () => {
         setModalVisible(true);
     };
 
     const handleConfirmSendMessage = async () => {
-        if (currentPage === 1) {
-            const formDataPage1 = {
-                session_detail_id: selectedOption,
-                institution: selectedInstitution,
-                parent_type: selectedOptionTwo,
-                student_name: name,
-                student_class: selectedOptionThree,
-                parent_name: namaOrtu,
-                parent_phone: noWa,
-                attendance_type: attendanceType,
-                start_time: startTime,
-                end_time: endTime,
-                reason_late: alasan,
-                resume: resume,
-                resume_file: selectedImage,
-            };
-            try {
-                const responsePage1 = await sendFormDataToAPIPage1(formDataPage1);
-                if (responsePage1.id) {
-                    console.log('Data pada halaman 1 berhasil dikirim dengan ID:', responsePage1.id);
-                } else {
-                    console.log('Gagal mengirim jawaban pada halaman 1');
-                }
-            } catch (error) {
-                console.error('Error handling confirmation on page 1:', error);
-            }
-        } else if (currentPage === 2) {
-            const formDataPage2 = {
-                answers: ujian,
-            };
+        try {
+            let responsePage1 = null;
 
-            try {
-                const responsePage2 = await sendFormDataToAPIPage2(formDataPage2);
-                if (responsePage2.id) {
-                    console.log('Data pada halaman 2 berhasil dikirim dengan ID:', responsePage2.id);
-                } else {
-                    console.log('Gagal mengirim jawaban pada halaman 2');
+            if (currentPage === 1) {
+                const formDataPage1 = {
+                    session_detail_id: selectedOption,
+                    institution: selectedInstitution,
+                    parent_type: selectedOptionTwo,
+                    student_name: name,
+                    student_class: selectedOptionThree,
+                    parent_name: namaOrtu,
+                    parent_phone: noWa,
+                    attendance_type: attendanceType,
+                    start_time: startTime,
+                    end_time: endTime,
+                    reason_late: alasan,
+                    resume: resume,
+                    resume_file: selectedImage,
+
+                    // Tambahkan ID dari respons API
+                    id: responseDataPage1.body.id, // Gantilah responseDataPage1 dengan respons aktual dari API
+                };
+
+                try {
+                    responsePage1 = await sendFormDataToAPIPage1(formDataPage1);
+
+                    if (responsePage1.id) {
+                        console.log('Data pada halaman 1 berhasil dikirim dengan ID:', responsePage1.id);
+                        setPage1Id(responsePage1.id);
+                    } else {
+                        throw new Error('Gagal mengirim jawaban pada halaman 1');
+                    }
+                } catch (error) {
+                    console.error('Error handling confirmation on page 1:', error.message);
+                    return;
                 }
-            } catch (error) {
-                console.error('Error handling confirmation on page 2:', error);
             }
+
+            if (currentPage === 2) {
+                if (!page1Id) {
+                    console.error('ID dari Page 1 tidak tersedia.');
+                    return;
+                }
+
+                const formDataPage2 = {
+                    session_detail_id: page1Id, // Gunakan page1Id yang telah diperoleh
+                    answers: selectedAnswers,
+                };
+
+                try {
+                    const responsePage2 = await sendFormDataToAPIPage2(formDataPage2);
+
+                    if (responsePage2.id) {
+                        console.log('Data pada halaman 2 berhasil dikirim dengan ID:', responsePage2.id);
+                    } else {
+                        throw new Error('Gagal mengirim jawaban pada halaman 2');
+                    }
+                } catch (error) {
+                    if (error.response && error.response.status === 422) {
+                        console.error('Kesalahan validasi pada halaman 2:', error.response.data);
+                    } else if (error.response && error.response.status === 500) {
+                        console.error('Terjadi kesalahan server pada halaman 2:', error.response.data);
+                    } else {
+                        console.error('Terjadi kesalahan saat mengirim data pada halaman 2:', error.message);
+                    }
+                }
+            }
+
+            // Setelah selesai mengirim data, lakukan pengaturan dan penghapusan data yang diperlukan.
+            // setSelectedOption('');
+            // setSelectedOptionTwo('');
+            // setSelectedOptionThree('');
+            // setName('');
+            // setOrtu('');
+            // setNoWa('');
+            // setAlasan('');
+            // setResume('');
+            // setAttendanceType('');
+            // setSelectedImage(null);
+            // setStartTime(null);
+            // setEndTime(null);
+            // setModalVisible(false);
+        } catch (mainError) {
+            console.error('Terjadi kesalahan utama:', mainError.message);
         }
-
-        setSelectedOption('');
-        setSelectedOptionTwo('');
-        setSelectedOptionThree('');
-        setName('');
-        setOrtu('');
-        setNoWa('');
-        setAlasan('');
-        setResume('');
-        setAttendanceType('');
-        setSelectedImage(null);
-        setStartTime(null);
-        setEndTime(null);
-        setModalVisible(false);
     };
+
+
+
 
     const handleCancelSendMessage = () => {
         setModalVisible(false);
@@ -252,6 +346,7 @@ const FormInput = () => {
     const handleNextPage = () => {
         setCurrentPage(currentPage + 1);
     };
+
     return (
         <ScrollView style={styles.container}>
             {currentPage === 1 && (
@@ -478,7 +573,7 @@ const FormInput = () => {
                                 <View key={option.id} style={styles.optionContainer}>
                                     <Text style={styles.optionLabel}>{`Pilihan ${optionIndex + 1}`}</Text>
                                     <CheckBox
-                                        checked={ujian[question.id] === option.id}
+                                        checked={selectedAnswers.some(answer => answer.question_id === question.id && answer.question_detail_id === option.id)}
                                         onPress={() => handleOptionSelect(question.id, option.id)}
                                         containerStyle={styles.checkBoxContainer}
                                     />
@@ -492,8 +587,6 @@ const FormInput = () => {
                     </TouchableOpacity>
                 </>
             )}
-
-
             <Modal isVisible={isModalVisible}>
                 <View style={styles.modalContent}>
                     <Text style={styles.modalTitle}>Konfirmasi</Text>
@@ -536,10 +629,10 @@ const styles = StyleSheet.create({
         padding: 15,
     },
     selectedImageStyle: {
-        width: 300, // Lebar gambar yang sudah dipilih
+        width: 300,
         height: 300,
-        marginBottom: 10, // Ruang bawah gambar yang sudah dipilih
-        borderRadius: 8, // Sudut melengkung gambar yang sudah dipilih
+        marginBottom: 10,
+        borderRadius: 8,
     },
     selectedFileContainer: {
         marginTop: 10,

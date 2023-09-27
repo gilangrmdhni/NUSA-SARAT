@@ -1,15 +1,25 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import Swiper from 'react-native-swiper';
 
 const NewsDetail = ({ route }) => {
   const { news } = route.params;
 
   return (
     <View style={styles.container}>
-      <Image source={news.image} style={styles.image} />
+      <Swiper
+        style={styles.slider}
+        showsButtons={true}
+      >
+        {/* Tampilkan gambar dari donation_history dalam slider */}
+        {news.donation_history.map((donation, index) => (
+          <View key={index}>
+            <Image source={{ uri: donation.image_url }} style={styles.image} />
+          </View>
+        ))}
+      </Swiper>
       <View style={styles.contentContainer}>
-        <Text style={styles.title}>{news.title}</Text>
-        <Text style={styles.date}>{news.date}</Text>
+        <Text style={styles.date}>{news.createdAt}</Text>
         <Text style={styles.description}>{news.description}</Text>
       </View>
     </View>
@@ -20,6 +30,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  slider: {
+    height: 200,
   },
   image: {
     width: '100%',

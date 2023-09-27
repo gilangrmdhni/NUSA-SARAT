@@ -4,9 +4,9 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'reac
 import { MaterialIcons } from '@expo/vector-icons';
 import axios from 'axios';
 import Modal from 'react-native-modal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const BASE_URL = 'https://reqres.in/api';
-const API_KEY = '59927e4dffe0be25f937';
+const BASE_URL = 'https://nusa-api.nuncorp.id/api/v1';
 
 const LoginScreen = () => {
     const navigation = useNavigation();
@@ -18,37 +18,29 @@ const LoginScreen = () => {
 
 
     const handleLogin = async () => {
-        try {
-            const response = await axios.post(`${BASE_URL}/login`, {
-                email,
-                password,
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${API_KEY}`,
-                },
-            });
-
-            if (response.data.token) {
-                console.log('Login berhasil:', response.data);
-                navigation.navigate('Home');
-            } else {
-                if (response.data.error) {
-                    console.error('Login gagal:', response.data.error);
-                    setErrorMessage('Email atau kata sandi salah.');
+        if (email && password) {
+            try {
+                const response = await axios.post('https://nusa-api.nuncorp.id/api/v1/user/login', {
+                    email,
+                    password,
+                });
+    
+                if (response.status === 200) {
+                    const userData = response.data.body; 
+                    await AsyncStorage.setItem('user', JSON.stringify(userData));
+                    navigation.navigate('Home'); 
                 } else {
-                    console.error('Login gagal: Tidak ada respons yang valid dari server');
-                    setErrorMessage('Terjadi kesalahan saat mencoba login.');
+                    Alert.alert('Login Gagal', 'Kredensial yang dimasukkan salah. Silakan coba lagi.');
                 }
-
-                setErrorVisible(true);
+            } catch (error) {
+                console.error('Gagal melakukan permintaan login:', error);
+                Alert.alert('Error', 'Terjadi kesalahan saat melakukan login. Silakan coba lagi nanti.');
             }
-        } catch (error) {
-            console.error('Terjadi kesalahan saat mencoba login:', error);
-            setErrorMessage('Terjadi kesalahan saat mencoba login.');
-            setErrorVisible(true);
+        } else {
+            Alert.alert('Peringatan', 'Silakan isi email dan password Anda.');
         }
     };
-
+    
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);

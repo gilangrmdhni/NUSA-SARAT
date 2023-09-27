@@ -1,5 +1,5 @@
 import React from 'react';
-import AppNavigator from './navigation/AppNavigator'; // Sesuaikan dengan lokasi AppNavigator.js
+import AppNavigator from './navigation/AppNavigator'; 
 
 const App = () => {
   return (
