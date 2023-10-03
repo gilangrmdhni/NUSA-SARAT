@@ -6,8 +6,6 @@ import axios from 'axios';
 import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const BASE_URL = 'https://nusa-api.nuncorp.id/api/v1';
-
 const LoginScreen = () => {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
@@ -20,7 +18,7 @@ const LoginScreen = () => {
     const handleLogin = async () => {
         if (email && password) {
             try {
-                const response = await axios.post('https://nusa-api.nuncorp.id/api/v1/user/login', {
+                const response = await axios.post('https://api.nusa-v2.nuncorp.id/api/v1/user/login', {
                     email,
                     password,
                 });
@@ -131,6 +129,7 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderRadius: 15,
         borderWidth: 0,
+        paddingLeft:20,
         marginBottom: 15,
         paddingHorizontal: 10,
     },

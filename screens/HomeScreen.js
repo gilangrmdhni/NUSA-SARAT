@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
-    marginTop: 20,
+    marginTop: 10,
     backgroundColor: 'white',
     borderRadius: 10,
     margin: 10,
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   slider: {
-    marginTop:10
+    flex:1,
   },
   titles: {
     fontWeight: 'bold',
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     marginVertical: 6, 
-    color: '#F16877',
+    color: '#C0142B',
   },
 });
 

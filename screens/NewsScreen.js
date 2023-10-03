@@ -6,23 +6,23 @@ const NewsDetail = ({ route }) => {
   const { news } = route.params;
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Swiper
         style={styles.slider}
-        showsButtons={true}
+        showsButtons={true} 
       >
-        {/* Tampilkan gambar dari donation_history dalam slider */}
-        {news.donation_history.map((donation, index) => (
+        {news.images.map((image, index) => (
           <View key={index}>
-            <Image source={{ uri: donation.image_url }} style={styles.image} />
+            <Image source={{ uri: image.image_url }} style={styles.image} />
           </View>
         ))}
       </Swiper>
       <View style={styles.contentContainer}>
-        <Text style={styles.date}>{news.createdAt}</Text>
+        <Text style={styles.title}>{news.title}</Text>
+        <Text style={styles.date}>{news.date}</Text>
         <Text style={styles.description}>{news.description}</Text>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

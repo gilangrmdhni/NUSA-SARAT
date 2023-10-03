@@ -1,10 +1,11 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginScreen from '../screens/LoginScreen'; 
-import HomeScreen from '../screens/HomeScreen'; 
+import LoginScreen from '../screens/LoginScreen';
+import HomeScreen from '../screens/HomeScreen';
 import SubmitScreen from '../screens/SubmitScreen';
 import RiwayatScreen from '../screens/RiwayatScreen';
+import RiwayatInfaq from '../screens/RiwayatInfaqScreen';
 import HasilScreen from '../screens/HasilScreen';
 import NewsDetail from '../screens/NewsScreen';
 import BottomNavigationBar from './BottomNavigationBar';
@@ -25,17 +26,22 @@ const AppNavigator = () => {
           }} />
         <Stack.Screen name="Submit" component={SubmitScreen} options={{
           headerTitle: 'Ujian', headerStyle: {
-            backgroundColor: '#F16877',
+            backgroundColor: '#C0142B',
           },
         }} />
         <Stack.Screen name="Riwayat" component={RiwayatScreen} options={{
           headerTitle: 'Riwayat', headerStyle: {
-            backgroundColor: '#F16877',
+            backgroundColor: '#C0142B',
           },
         }} />
         <Stack.Screen name="Hasil" component={HasilScreen} options={{
           headerTitle: 'Hasil', headerStyle: {
-            backgroundColor: '#F16877',
+            backgroundColor: '#C0142B',
+          },
+        }} />
+        <Stack.Screen name="RiwayatInfaq" component={RiwayatInfaq} options={{
+          headerTitle: 'Riwayat Infaq', headerStyle: {
+            backgroundColor: '#C0142B',
           },
         }} />
         <Stack.Screen name="BottomTab" component={BottomNavigationBar} options={{ headerTitle: '' }} />

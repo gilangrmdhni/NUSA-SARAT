@@ -27,7 +27,7 @@ const AppHeader = () => {
                 <Text style={styles.greetingTexts}>{greeting}</Text>
             </View>
             <TouchableOpacity style={styles.iconContainer}>
-                <FontAwesome name="bell" size={24} color="black" />
+                <FontAwesome name="bell" size={24} color="white" />
             </TouchableOpacity>
         </View>
     );
@@ -41,25 +41,28 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-end',
         padding: 30,
-        backgroundColor: '#F16877',
+        backgroundColor: '#C0142B',
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
     },
     iconContainer: {
-        paddingTop: 20,
+        paddingTop: 40,
         marginLeft: 50,
+
     },
     greetingContainer: {
-        paddingTop: 20,
+        paddingTop: 40,
         paddingRight: 150,
     },
     greetingText: {
         fontSize: 16,
         fontWeight: 'bold',
+        color: 'white'
     },
     greetingTexts: {
         fontSize: 16,
         fontWeight: 'bold',
+        color: 'white'
     },
     '@media (min-width: 768px)': {
         headerContainer: {
