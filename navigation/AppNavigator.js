@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import BottomTabNavigator from './BottomNavigationBar';
 import LoginScreen from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
 import SubmitScreen from '../screens/SubmitScreen';
@@ -20,10 +21,7 @@ const AppNavigator = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerTitle: '' }} />
-        <Stack.Screen name="Home" component={HomeScreen}
-          options={{
-            headerShown: false
-          }} />
+        <Stack.Screen name="Home" component={BottomTabNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="Submit" component={SubmitScreen} options={{
           headerTitle: 'Ujian', headerStyle: {
             backgroundColor: '#C0142B',
@@ -44,7 +42,6 @@ const AppNavigator = () => {
             backgroundColor: '#C0142B',
           },
         }} />
-        <Stack.Screen name="BottomTab" component={BottomNavigationBar} options={{ headerTitle: '' }} />
         <Stack.Screen
           name="NewsDetail"
           component={NewsDetail}

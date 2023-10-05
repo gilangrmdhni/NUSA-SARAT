@@ -4,9 +4,9 @@
     "slug": "slug-aplikasi-anda",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/splashSAIM.png",
+    "icon": "./assets/splash.png",
     "splash": {
-      "image": "./assets/splashSAIM.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
