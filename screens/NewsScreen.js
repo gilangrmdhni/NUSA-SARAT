@@ -11,9 +11,9 @@ const NewsDetail = ({ route }) => {
         style={styles.slider}
         showsButtons={true} 
       >
-        {news.images.map((image, index) => (
+        {news.images.map((images, index) => (
           <View key={index}>
-            <Image source={{ uri: image.image_url }} style={styles.image} />
+            <Image source={{ uri: `https://api-nusa-sarat.nuncorp.id/storage/${images.image_url}` }} style={styles.image} />
           </View>
         ))}
       </Swiper>

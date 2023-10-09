@@ -20,6 +20,8 @@ const AppHeader = () => {
         getGreeting();
     }, []);
 
+    const { width, height } = Dimensions.get('window');
+
     return (
         <View style={styles.headerContainer}>
             <View style={styles.greetingContainer}>
@@ -27,50 +29,41 @@ const AppHeader = () => {
                 <Text style={styles.greetingTexts}>{greeting}</Text>
             </View>
             <TouchableOpacity style={styles.iconContainer}>
-                <FontAwesome name="bell" size={24} color="white" />
+                <FontAwesome name="bell" size={(24)} color="white" />
             </TouchableOpacity>
         </View>
     );
 };
-
-const windowWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
     headerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-end',
-        padding: 30,
+        padding: '5%', 
+        paddingTop: '10%',
         backgroundColor: '#C0142B',
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
     },
     iconContainer: {
-        paddingTop: 40,
-        marginLeft: 50,
-
+        paddingTop: '5%', 
+        paddingRight: '10%',
+        marginLeft: '5%',
     },
     greetingContainer: {
-        paddingTop: 40,
-        paddingRight: 150,
+        paddingTop: '5%', 
+        paddingRight: '35%', 
     },
     greetingText: {
-        fontSize: 16,
+        fontSize: 16, 
         fontWeight: 'bold',
-        color: 'white'
+        color: 'white',
     },
     greetingTexts: {
-        fontSize: 16,
+        fontSize: 16, 
         fontWeight: 'bold',
-        color: 'white'
-    },
-    '@media (min-width: 768px)': {
-        headerContainer: {
-            paddingVertical: 20,
-        },
-        greetingText: {
-            fontSize: 24,
-        },
+        color: 'white',
     },
 });
 

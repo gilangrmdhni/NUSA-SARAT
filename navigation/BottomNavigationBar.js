@@ -1,7 +1,9 @@
+// Import yang diperlukan
+
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity, View, Text, Animated, Easing, StyleSheet } from 'react-native';
+import { TouchableOpacity, View, Text, Animated, Easing, StyleSheet, Dimensions } from 'react-native';
 
 import HomeScreen from '../screens/HomeScreen';
 import RiwayatScreen from '../screens/RiwayatInfaqScreen';
@@ -54,6 +56,8 @@ const BottomTabNavigator = () => {
   );
 };
 
+const windowWidth = Dimensions.get('window').width;
+
 const CustomQRISButton = ({ accessibilityState, children, onPress }) => {
   const focused = accessibilityState.selected;
 
@@ -89,8 +93,8 @@ const CustomQRISButton = ({ accessibilityState, children, onPress }) => {
       ]}
     >
       <View style={styles.qrisButtonContainer}>
-        <Ionicons name="qr-code" color={focused ? '#C0142B' : '#FFFFFF'} size={30} />
-        <Text style={{ color: focused ? '#C0142B' : '#FFFFFF', marginTop: 5 }}>Scan</Text>
+        <Ionicons name="qr-code" color={focused ? '#C0142B' : '#FFFFFF' } size={ windowWidth * 0.07 } />
+        <Text style={{ color: focused ? '#C0142B' : '#FFFFFF', marginTop: 5, marginBottom: 10 }}>Infaq</Text>
       </View>
       {children}
     </TouchableOpacity>
@@ -99,13 +103,13 @@ const CustomQRISButton = ({ accessibilityState, children, onPress }) => {
 
 const styles = StyleSheet.create({
   qrisButton: {
-    width: 70,
-    height: 70,
+    width: windowWidth * 0.18,
+    height: windowWidth * 0.18,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#C0142B',
-    borderRadius: 50,
-    padding: 10,
+    borderRadius: windowWidth * 0.09,
+    padding: windowWidth * 0.03,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

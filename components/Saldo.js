@@ -45,7 +45,7 @@ const SaldoCard = () => {
                             </View>
                         )}
                     </View>
-                    <View style={styles.actionButtons}>
+                    {/* <View style={styles.actionButtons}>
                         <TouchableOpacity style={styles.actionButton} onPress={() => console.log('Infaq pressed')}>
                             <FontAwesome5 name="qrcode" size={20} color="#C0142B" />
                             <Text style={[styles.buttonText, { color: '#C0142B' }]}>Infaq</Text>
@@ -54,7 +54,7 @@ const SaldoCard = () => {
                             <FontAwesome5 name="history" size={20} color="#C0142B" />
                             <Text style={[styles.buttonText, { color: '#C0142B' }]}>Riwayat</Text>
                         </TouchableOpacity>
-                    </View>
+                    </View> */}
                 </View>
             </ImageBackground>
         </Card>
