@@ -6,7 +6,6 @@ import { ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import SaldoCard from '../components/Saldo';
 import Header from '../components/header';
-import { Card, Icon } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const HomeScreen = () => {
@@ -26,7 +25,6 @@ const HomeScreen = () => {
           <Image source={item.image} style={styles.cardImage} resizeMode="contain" />
         </View>
         <View style={styles.cardContent}>
-          <Icon name={item.icon} type='font-awesome' color='#517fa4' size={40} />
           <Text style={styles.cardTitle}>{item.title}</Text>
         </View>
       </TouchableOpacity>

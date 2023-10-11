@@ -20,7 +20,7 @@ const AppNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginScreen} options={{ headerTitle: '' }} />
+        <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false }} />
         <Stack.Screen name="Home" component={BottomTabNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="Submit" component={SubmitScreen} options={{
           headerTitle: 'Ujian', headerStyle: {

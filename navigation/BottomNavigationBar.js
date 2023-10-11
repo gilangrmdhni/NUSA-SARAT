@@ -29,7 +29,7 @@ const BottomTabNavigator = () => {
           headerShown: false,
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="QRIS"
         component={RiwayatScreen}
         options={{
@@ -41,7 +41,7 @@ const BottomTabNavigator = () => {
             <CustomQRISButton {...props} />
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Hasil"
         component={SubmitScreen}

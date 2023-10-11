@@ -4,9 +4,9 @@
     "slug": "slug-aplikasi-anda",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/splash.png",
+    "icon": "./assets/logoSAIM.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/SAIMS.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -21,7 +21,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logoSAIM.png",
         "backgroundColor": "#FFFFFF"
       },
       "permissions": [

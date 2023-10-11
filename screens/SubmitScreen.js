@@ -15,7 +15,7 @@ import { moderateScale, verticalScale } from 'react-native-size-matters';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import * as ImagePicker from 'expo-image-picker';
 import ModalDropdown from 'react-native-modal-dropdown';
-import { CheckBox } from 'react-native-elements';
+import { Checkbox } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -269,7 +269,7 @@ const FormInput = () => {
                     resume_file: selectedImage,
 
                     // Tambahkan ID dari respons API
-                    id: responseDataPage1.body.id, // Gantilah responseDataPage1 dengan respons aktual dari API
+                    id: responsePage1.body.id, // Gantilah responseDataPage1 dengan respons aktual dari API
                 };
 
                 try {
@@ -318,19 +318,19 @@ const FormInput = () => {
             }
 
             // Setelah selesai mengirim data, lakukan pengaturan dan penghapusan data yang diperlukan.
-            // setSelectedOption('');
-            // setSelectedOptionTwo('');
-            // setSelectedOptionThree('');
-            // setName('');
-            // setOrtu('');
-            // setNoWa('');
-            // setAlasan('');
-            // setResume('');
-            // setAttendanceType('');
-            // setSelectedImage(null);
-            // setStartTime(null);
-            // setEndTime(null);
-            // setModalVisible(false);
+            setSelectedOption('');
+            setSelectedOptionTwo('');
+            setSelectedOptionThree('');
+            setName('');
+            setOrtu('');
+            setNoWa('');
+            setAlasan('');
+            setResume('');
+            setAttendanceType('');
+            setSelectedImage(null);
+            setStartTime(null);
+            setEndTime(null);
+            setModalVisible(false);
         } catch (mainError) {
             console.error('Terjadi kesalahan utama:', mainError.message);
         }
@@ -572,10 +572,12 @@ const FormInput = () => {
                             {question.question_details.map((option, optionIndex) => (
                                 <View key={option.id} style={styles.optionContainer}>
                                     <Text style={styles.optionLabel}>{`Pilihan ${optionIndex + 1}`}</Text>
-                                    <CheckBox
-                                        checked={selectedAnswers.some(answer => answer.question_id === question.id && answer.question_detail_id === option.id)}
+                                    <Checkbox
+                                        status={selectedAnswers.some(answer => answer.question_id === question.id && answer.question_detail_id === option.id) ? 'checked' : 'unchecked'}
                                         onPress={() => handleOptionSelect(question.id, option.id)}
-                                        containerStyle={styles.checkBoxContainer}
+                                        color="#C0142B"
+                                        borderColor="#F16877"
+                                        borderWidth={0.5}
                                     />
                                     <Text style={styles.checkBoxLabel}>{option.description}</Text>
                                 </View>
@@ -863,6 +865,11 @@ const styles = StyleSheet.create({
     checkBoxLabel: {
         fontSize: 14,
         marginLeft: 8,
+    },
+    checkbox: {
+        borderWidth: 1,
+        borderColor: '#C0142B', // Choose your desired border color
+        borderRadius: 5, // Optional: Add border radius for rounded corners
     },
 
 });
