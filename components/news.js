@@ -1,36 +1,63 @@
-import React, { useEffect, useState } from 'react';
+// components/News.js
+
+import React, { useEffect, forwardRef, useImperativeHandle } from 'react';
 import { View, FlatList, StyleSheet, Text, TouchableOpacity, Image, Button } from 'react-native';
-// import { WebView } from 'react-native-webview';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 
-const NewsList = () => {
-  const navigation = useNavigation();
-  const [newsData, setNewsData] = useState([]);
-  const [visibleNews, setVisibleNews] = useState(5);
+export const fetchData = async () => {
+  try {
+    const response = await axios.get('https://api-nusa-sarat.nuncorp.id/api/v1/news/filter');
+    return response.data.body;
+  } catch (error) {
+    console.error('Error fetching news data: ', error);
+    throw error;
+  }
+};
 
-  useEffect(() => {
-    axios.get('https://api-nusa-sarat.nuncorp.id/api/v1/news/filter')
-      .then((response) => {
-        setNewsData(response.data.body);
-      })
-      .catch((error) => {
-        console.error('Error fetching news data: ', error);
-      });
-  }, []);
+const News = forwardRef(({ onRefresh, refreshing }, ref) => {
+  const navigation = useNavigation();
+  const [newsData, setNewsData] = React.useState([]);
+  const [visibleNews, setVisibleNews] = React.useState(5);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('https://api-nusa-sarat.nuncorp.id/api/v1/news/filter');
+      console.log('Response from API:', response.data); // Add this log
+      setNewsData(response.data.body);
+    } catch (error) {
+      console.error('Error fetching news data: ', error);
+    }
+  };
 
   const loadMore = () => {
     setVisibleNews((prevVisibleNews) => prevVisibleNews + 5);
   };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      // Call the refresh function passed from HomeScreen
+      onRefresh(fetchData);
+    });
+
+    return unsubscribe;
+  }, [navigation, onRefresh]);
+
+  // Expose fetchData function through the ref
+  useImperativeHandle(ref, () => ({
+    fetchData,
+  }));
 
   const renderItem = ({ item }) => {
     const createdAtDate = new Date(item.createdAt);
 
     const day = createdAtDate.getDate();
-    const month = createdAtDate.toLocaleString('default', { month: 'long' }); // Mengambil nama bulan
+    const month = createdAtDate.toLocaleString('default', { month: 'long' });
     const year = createdAtDate.getFullYear();
-    
 
     return (
       <TouchableOpacity
@@ -61,7 +88,7 @@ const NewsList = () => {
       )}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -94,4 +121,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewsList;
+export default News;

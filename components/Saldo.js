@@ -12,7 +12,7 @@ const SaldoCard = () => {
 
 
     useEffect(() => {
-        axios.get('https://api-nusa-sarat.nuncorp.id/api/v1/donation/fetch/5')
+        axios.get('https://api-nusa-sarat.nuncorp.id/api/v1/donation/ongoing')
             .then((response) => {
                 const totalDonation = response.data.body.total;
                 const sessionDetail = response.data.body.session_detail;

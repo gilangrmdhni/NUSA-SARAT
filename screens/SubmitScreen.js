@@ -47,6 +47,7 @@ const FormInput = () => {
     const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
     const [questions, setQuestions] = useState([]);
     const [startTime, setStartTime] = useState(null);
+    const [error, setError] = useState(null);
     const [endTime, setEndTime] = useState(null);
     const [isModalVisible, setModalVisible] = useState(false);
 
@@ -343,9 +344,44 @@ const FormInput = () => {
         setModalVisible(false);
     };
 
+    const [fieldValidations, setFieldValidations] = useState({
+        selectedOption: true,
+        selectedInstitution: true,
+        selectedOptionTwo: true,
+        name: true,
+        selectedOptionThree: true,
+        namaOrtu: true,
+        noWa: true,
+        value: true,
+        resume: true,
+        selectedImage: true,
+        startTime: true,
+        endTime: true,
+    });
+
     const handleNextPage = () => {
-        setCurrentPage(currentPage + 1);
+        if (currentPage === 1) {
+            const validation = {
+                selectedOption,
+                selectedInstitution,
+                selectedOptionTwo,
+                name,
+                selectedOptionThree,
+                namaOrtu,
+                noWa,
+                attendanceType,
+                startTime,
+                endTime,
+            };
+
+            setFieldValidations(validation);
+
+            if (Object.values(validation).every(value => value)) {
+                setCurrentPage(currentPage + 1);
+            }
+        }
     };
+
 
     return (
         <ScrollView style={styles.container}>
@@ -353,12 +389,18 @@ const FormInput = () => {
                 <>
                     <Text style={styles.title}>Resume SARAT T.A. 2022/2023</Text>
                     <Text style={styles.label}>Sesi</Text>
+                    {!fieldValidations.selectedOption && (
+                                    <Text style={styles.errorText}>Tolong pilih sesi</Text>
+                                )}
                     <View style={styles.radioButtonContainer}>
                         {sessions.map(session => (
                             <View key={session.id}>
-                                <View
+                                <TouchableOpacity
                                     onPress={() => setSelectedOption(session.id)}
-                                    style={styles.radioButtonItem}
+                                    style={[
+                                        styles.radioButtonItem,
+                                        { borderColor: fieldValidations.selectedOption ? '#F16877' : 'red' },
+                                    ]}
                                 >
                                     <RadioButton
                                         value={session.id}
@@ -366,15 +408,18 @@ const FormInput = () => {
                                         onPress={() => setSelectedOption(session.id)}
                                         color="#F16877"
                                         uncheckedColor="#F16877"
-                                        borderColor="#F16877"
+                                        borderColor="black"
                                         borderWidth={0.5}
                                     />
                                     <Text style={styles.radioButtonLabel}>{session.title} : {session.description}</Text>
-                                </View>
+                                </TouchableOpacity>
                             </View>
                         ))}
                     </View>
                     <Text style={styles.label}>Asal Institusi</Text>
+                    {!fieldValidations.selectedInstitution && (
+                        <Text style={styles.errorText}>Tolong pilih salah satu</Text>
+                    )}
                     <ModalDropdown
                         options={institutions.map((institution) => institution.label)}
                         defaultValue={selectedInstitution || 'Pilih Institusi'}
@@ -398,6 +443,9 @@ const FormInput = () => {
                     />
 
                     <Text style={styles.label}>Posisi Rumah Tangga</Text>
+                    {!fieldValidations.selectedOptionTwo && (
+                        <Text style={styles.errorText}>Tolong pilih salah satu</Text>
+                    )}
                     <View style={styles.radioButtonContainer}>
                         <View style={styles.radioButtonItem}>
                             <RadioButton
@@ -406,26 +454,32 @@ const FormInput = () => {
                                 onPress={() => setSelectedOptionTwo('ayah')}
                                 color="#F16877"
                                 uncheckedColor="#F16877"
-                                borderColor="#F16877"
+                                borderColor="black"
                                 borderWidth={0.5}
                             />
                             <Text style={styles.radioButtonLabel}>Ayah</Text>
                         </View>
 
-                        <View style={styles.radioButtonItem}>
+                        <View style={[
+                            styles.radioButtonItem,
+                            { borderColor: fieldValidations.selectedOptionTwo ? '#F16877' : 'red' },
+                        ]}>
                             <RadioButton
                                 value="ibu"
                                 status={selectedOptionTwo === 'ibu' ? 'checked' : 'unchecked'}
                                 onPress={() => setSelectedOptionTwo('ibu')}
                                 color="#F16877"
                                 uncheckedColor="#F16877"
-                                borderColor="#F16877"
+                                borderColor="black"
                                 borderWidth={0.5}
                             />
                             <Text style={styles.radioButtonLabel}>Bunda</Text>
                         </View>
                     </View>
                     <Text style={styles.label}>Nama Lengkap Ananda:</Text>
+                    {!fieldValidations.name && (
+                        <Text style={styles.errorText}>Tolong isi nama lengkap</Text>
+                    )}
                     <TextInput
                         style={styles.input}
                         value={name}
@@ -433,13 +487,20 @@ const FormInput = () => {
                         placeholder="Nama Lengkap"
                     />
                     <Text style={styles.label}>Kelas Ananda (Diisi khusus bagi Wali Murid SAIM)</Text>
+                    {!fieldValidations.selectedOptionThree && (
+                        <Text style={styles.errorText}>Tolong isi Kelas ananda</Text>
+                    )}
                     <TextInput
                         style={styles.input}
                         value={selectedOptionThree}
                         onChangeText={(text) => setSelectedOptionThree(text)}
                         placeholder="Kelas Ananda"
                     />
+                   
                     <Text style={styles.label}>Nama Lengkap Ayah/Bunda | Contoh: Dr. H. Abdurrahman, M.Si. (perhatikan spasi, titik koma, huruf besar dan kecilnya):</Text>
+                    {!fieldValidations.namaOrtu && (
+                        <Text style={styles.errorText}>Tolong isi Nama Ayah/Bunda</Text>
+                    )}
                     <TextInput
                         style={styles.input}
                         value={namaOrtu}
@@ -447,7 +508,11 @@ const FormInput = () => {
                         placeholder="Nama Lengkap Ayah/Bunda"
                         keyboardType="default"
                     />
+                 
                     <Text style={styles.label}>Nomor Whatsapp | Contoh: '+628123456789 (perhatikan formatnya dan diawali tandi petik satu)</Text>
+                    {!fieldValidations.noWa && (
+                        <Text style={styles.errorText}>Tolong isi Nomor</Text>
+                    )}
                     <TextInput
                         style={styles.input}
                         value={noWa}
@@ -455,7 +520,11 @@ const FormInput = () => {
                         placeholder="Nomor Whatsapp"
                         keyboardType="phone-pad"
                     />
+                 
                     <Text style={styles.label}>Tipe Kehadiran</Text>
+                    {!fieldValidations.value && (
+                        <Text style={styles.errorText}>Tolong pilih salah satu</Text>
+                    )}
                     <ModalDropdown
                         options={attendanceOptions}
                         defaultValue={attendanceType}
@@ -473,11 +542,15 @@ const FormInput = () => {
                                     isSelected && styles.selectedDropdownRow,
                                 ]}
                             >
+                                
                                 <Text style={styles.dropdownText}>{option}</Text>
                             </TouchableOpacity>
                         )}
                     />
                     <Text style={styles.label}>Jam Kehadiran</Text>
+                    {!fieldValidations.startTime && (
+                        <Text style={styles.errorText}>Tolong pilih jam</Text>
+                    )}
                     <TouchableOpacity
                         style={styles.timeButton}
                         onPress={handleOpenStartTimePicker}
@@ -490,6 +563,9 @@ const FormInput = () => {
                     </TouchableOpacity>
 
                     <Text style={[styles.label, { color: 'black' }]}>Jam Kepulangan</Text>
+                    {!fieldValidations.endTime && (
+                        <Text style={styles.errorText}>Tolong pilih jam</Text>
+                    )}
                     <TouchableOpacity
                         style={styles.timeButton}
                         onPress={handleOpenEndTimePicker}
@@ -531,8 +607,11 @@ const FormInput = () => {
                     <View>
                         <Text style={styles.label}>"Silahkan Ayah/Bunda bisa memasukkan catatannya di kolom paragraf atau upload filenya. File bisa hasil ketikan, atau tulisan tangan yang dijepret dengan kamera untuk kemudian diunggah ke link. Boleh pilih yang mana saja yang memudahkan. Lebih kami sarankan dalam bentuk tulisan paragraf saja."</Text>
                     </View>
-
+                   
                     <Text style={{ marginBottom: 5, }} >1. Opsi Pertama, masukkan resume Ayah/Bunda disini dari hasil ketikan di laptop atau ketikan jempol di HP. Resume mengandung hal-hal baru yang didapatkan dari sesi kali ini. Dapat dituliskan poin per poin tanpa dibatasi jumlahnya.</Text>
+                    {!fieldValidations.resume && (
+                        <Text style={styles.errorText}>Tolong isi</Text>
+                    )}
                     <TextInput
                         style={styles.textarea}
                         value={resume}
@@ -543,6 +622,9 @@ const FormInput = () => {
                     />
 
                     <Text style={{ marginBottom: 5 }}>2. Opsi kedua, masukkan resume Ayah/Bunda disini jika ingin langsung mengambil foto dari coretannya di atas kertas.</Text>
+                    {!fieldValidations.selectedImage && (
+                        <Text style={styles.errorText}>Tolong upload</Text>
+                    )}
                     <TouchableOpacity
                         style={[styles.buttonStyle, styles.selectImageButtonStyle]}
                         activeOpacity={0.5}
@@ -669,12 +751,12 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         marginBottom: 16,
         paddingHorizontal: 8,
-        borderColor: '#F16877',
+        borderColor: 'black',
         borderRadius: 8,
     },
     textarea: {
         borderWidth: 1,
-        borderColor: '#F16877',
+        borderColor: 'black',
         marginBottom: 12,
         paddingHorizontal: 8,
         paddingTop: 8,
@@ -695,12 +777,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 10,
         borderRadius: 5,
-        borderColor: '#4CAF50',
+        borderColor: 'black',
     },
     uploadIcon: {
         marginRight: 10,
     },
     radioButtonContainer: {
+        marginTop: moderateScale(16),
         marginBottom: moderateScale(16),
     },
     radioButtonItem: {
@@ -724,7 +807,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 5,
         marginBottom: 12,
-        borderColor: '#F16877',
+        borderColor: 'black',
     },
     modalContent: {
         backgroundColor: 'white',
@@ -796,18 +879,19 @@ const styles = StyleSheet.create({
     },
     dropdownStyle: {
         height: 40,
-        borderColor: '#F16877',
+        borderColor: 'black',
         borderWidth: 1,
         borderRadius: 8,
         justifyContent: 'center',
         padding: 8,
+        
     },
     dropdownTextStyle: {
         fontSize: 16,
     },
     dropdownStyle: {
         height: 40,
-        borderColor: '#F16877',
+        borderColor: 'black',
         borderWidth: 1,
         borderRadius: 8,
         justifyContent: 'center',
@@ -827,6 +911,14 @@ const styles = StyleSheet.create({
     },
     dropdownText: {
         fontSize: 16,
+    },
+
+    invalidInput: {
+        borderColor: 'red',
+        borderWidth: 1,
+    },
+    errorText: {
+        color:'red'
     },
 
     // page two
@@ -853,7 +945,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginHorizontal: 5,
         paddingRight: 20,
-        color: '#333', // Ubah sesuai dengan warna teks yang Anda inginkan
+        color: '#333',
     },
     checkBoxContainer: {
         backgroundColor: 'transparent',
@@ -868,7 +960,7 @@ const styles = StyleSheet.create({
     },
     checkbox: {
         borderWidth: 1,
-        borderColor: '#C0142B', // Choose your desired border color
+        borderColor: 'black', // Choose your desired border color
         borderRadius: 5, // Optional: Add border radius for rounded corners
     },
 

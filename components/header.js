@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     greetingTexts: {
-        fontSize: 10, 
+        fontSize: 16, 
         fontWeight: 'bold',
         color: 'white',
     },
